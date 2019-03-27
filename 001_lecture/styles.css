@@ -1,0 +1,12 @@
+h1 {
+    color: #0c8e05;
+    text-align: center;
+}
+p {
+    color: red;
+}
+div {
+    background-color: teal;
+    width: 100px;
+    height: 400px;
+}
