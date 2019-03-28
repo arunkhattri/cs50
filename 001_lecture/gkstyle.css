@@ -14,3 +14,7 @@ th, td {
 th {
     background-color: lightgray;
 }
+p::selection {
+    color: red;
+    background-color: yellow;
+}
