@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Birthday</title>
+    <style>
+     h1 {
+       text-align: center;
+     }
+    </style>
+  </head>
+  <body>
+      <h1>Birthday's</h1>
+    <ol>
+        {% for k, v in bd.items() %}
+          {% if v == "Next year !!!" %}
+            <li>{{ k }} : {{ v }}</li>
+          {% else %}
+            <li>{{ k }} : {{ v }} days remaining</li>
+          {% endif %}
+        {% endfor %}
+    </ol>
+  </body>
+</html>
