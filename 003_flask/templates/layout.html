@@ -2,8 +2,18 @@
 <html>
   <head>
     <title>My Website</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
   </head>
   <body>
+    <div class="top-bar">
+        <ul>
+        <li ><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('birthday') }}">Birthday's</a></li>
+        <li><a href="{{ url_for('newyear') }}">New year</a></li>
+        <li><a href="{{ url_for('registration') }}">Registration</a></li>
+        <li><a href="{{ url_for('notebook') }}">Note Pad</a></li>
+        </ul>
+    </div>
     <h1>
         {% block heading %}
         {% endblock %}
