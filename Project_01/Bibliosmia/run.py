@@ -1,0 +1,1 @@
+from bibliosmia import app

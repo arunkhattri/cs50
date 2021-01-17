@@ -1,0 +1,2 @@
+* flask env
+export flask_app=app.py

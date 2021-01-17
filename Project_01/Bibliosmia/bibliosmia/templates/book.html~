@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h3>Book Details</h3> 
+  <ul>
+    <li> Author: {{ ath }} </li>
+    <li>Title: {{ bk_name }}</li>
+    <li>ISBN: {{ book_id }}</li><br>
+    <h5>Goodreads Info:</h5>
+    <li>Average Rating: {{ avg_score }}}}</li>
+    <li>Total Rating Counts: {{ num_ratings }}}}</li>
+  </ul>
+{% endblock content %}

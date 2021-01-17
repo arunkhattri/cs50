@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <ul>
+    <li><h5>ISBN, Author, Title</h5></li>
+      <small class="text-muted ml-2">
+        Total Search Results: {{ counts }}
+      </small>
+  </ul>
+  <hr>
+  {% for result in results %}
+    <ul>
+      <li>
+        <a href="{{ url_for('book', book_id=result[2]) }}">
+        {{ result[2] }}, {{ result[0] }}, {{ result[1] }}
+        </a>
+      </li>
+    </ul>
+  {% endfor %}
+  
+{% endblock content %}

@@ -1,0 +1,5 @@
+FLASK_APP=run.py
+FLASK_ENV=development
+SECRET_KEY='835232907632fdf1fd56e4d93c07b500'
+SQLALCHEMY_DATABASE_URI = 'sqlite:///books.db'
+KEY = "W9zUpJNmIANUKrHJM66w"

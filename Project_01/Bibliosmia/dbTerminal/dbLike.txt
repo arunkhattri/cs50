@@ -1,0 +1,219 @@
+
+(base) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/Bibliosmia ‹master*›
+╰─$ from bibliosmia import db
+zsh: command not found: from
+(base) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/Bibliosmia ‹master*›
+╰─$ clear                                                                           127 ↵
+
+(base) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/Bibliosmia ‹master*›
+╰─$ ipython
+Python 3.7.3 (default, Mar 27 2019, 22:11:17)
+Type 'copyright', 'credits' or 'license' for more information
+IPython 7.4.0 -- An enhanced Interactive Python. Type '?' for help.
+
+(base) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/Bibliosmia ‹master*›
+╰─$ conda activate pyenv36
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/Bibliosmia ‹master*›
+╰─$ ipython
+Python 3.7.2 (default, Dec 29 2018, 06:19:36)
+Type 'copyright', 'credits' or 'license' for more information
+IPython 7.3.0 -- An enhanced Interactive Python. Type '?' for help.
+
+/home/arunkhattri/anaconda3/envs/pyenv36/lib/python3.7/site-packages/flask_sqlalchemy/__init__.py:794: FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhea
+d and will be disabled by default in the future.  Set it to True or False to suppress this warning.
+  'SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and '
+In [1]: from bibliosmia import db
+
+In [2]: from bibliosmia.models import User
+
+In [3]: user = User.query.all()
+
+In [4]: user
+Out[4]: [User('maira', 'maira@example.com', 'default.jpg')]
+
+In [5]: user.password
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+<ipython-input-5-9456b1ab438a> in <module>
+----> 1 user.password
+
+AttributeError: 'list' object has no attribute 'password'
+
+In [6]: user = User.query.first()
+
+In [7]: user.password
+Out[7]: '$2b$12$mgRdqxw1GWylUIKkMxDWlO6QwaubvvCLXNC5Gc611MEGW9RSgNKSO'
+
+In [8]:
+Do you really want to exit ([y]/n)? y
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/Bibliosmia ‹master*›
+╰─$  clear
+
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/Bibliosmia ‹master*›
+╰─$ ranger
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/Bibliosmia ‹master*›
+╰─$ cd ../cs50-flask-app
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/cs50-flask-app ‹searchFunctionality*›
+╰─$ nvim
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/cs50-flask-app ‹searchFunctionality*›
+╰─$ clear
+
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/cs50-flask-app ‹searchFunctionality*›
+╰─$ cd ../Bibliosmia
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/Bibliosmia ‹master*›
+╰─$ ls
+bibliosmia  books.csv  config.py  db.txt  dir_str.png  inserts.py  inserts.py~  __pycache__  requirements.txt  run.py
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/Bibliosmia ‹master*›
+╰─$ python inserts.py
+/home/arunkhattri/anaconda3/envs/pyenv36/lib/python3.7/site-packages/flask_sqlalchemy/__init__.py:794: FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and will b
+e disabled by default in the future.  Set it to True or False to suppress this warning.
+  'SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and '
+Traceback (most recent call last):
+  File "inserts.py", line 21, in <module>
+    ath = db.query.filter_by(name=author).first()
+AttributeError: 'SQLAlchemy' object has no attribute 'query'
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/Bibliosmia ‹master*›
+╰─$ python inserts.py                                                                                                                                                                        1 ↵
+/home/arunkhattri/anaconda3/envs/pyenv36/lib/python3.7/site-packages/flask_sqlalchemy/__init__.py:794: FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and will b
+e disabled by default in the future.  Set it to True or False to suppress this warning.
+  'SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and '
+500 records written in database.
+1000 records written in database.
+1500 records written in database.
+2000 records written in database.
+2500 records written in database.
+3000 records written in database.
+3500 records written in database.
+4000 records written in database.
+4500 records written in database.
+5000 records written in database.
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/Bibliosmia ‹master*›
+╰─$ clear
+
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/Bibliosmia ‹master*›
+╰─$ ipython
+Python 3.7.2 (default, Dec 29 2018, 06:19:36)
+Type 'copyright', 'credits' or 'license' for more information
+IPython 7.3.0 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: from bibliosmia import db
+/home/arunkhattri/anaconda3/envs/pyenv36/lib/python3.7/site-packages/flask_sqlalchemy/__init__.py:794: FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and will b
+e disabled by default in the future.  Set it to True or False to suppress this warning.
+  'SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and '
+
+In [2]: from bibliosmia.models import Books, Authors, Years
+
+In [3]: ath = Authors.query.filter_by(name='Gary Jennings').first()
+
+In [4]: ath
+Out[4]: Authors('Gary Jennings')
+
+In [5]: ath.id
+Out[5]: 8
+
+In [6]: ath1 = Authors.query.filter_by(name='Joseph').first()
+
+In [7]: ath1
+
+In [8]: ath1 = Authors.query.filter_by(name='Joseph Heller').first()
+
+In [9]: ath1
+Out[9]: Authors('Joseph Heller')
+
+In [10]: ath1.id
+Out[10]: 38
+
+In [11]: ath1.books
+Out[11]: [Books('Catch-22', '0684833395')]
+
+In [12]: ath.books
+Out[12]: [Books('Aztec', '0765317508')]
+
+In [13]: ath2 = Authors.query.filter(Authors.name.like("%Joseph%")).all()
+
+In [14]: ath2
+Out[14]:
+[Authors('Joseph Heller'),
+ Authors('Joseph Conrad'),
+ Authors('Joseph Wambaugh'),
+ Authors('Josephine Tey'),
+ Authors('Joseph Boyden'),
+ Authors('Josephine Angelini'),
+ Authors('Joseph O'Neill'),
+ Authors('Joseph Kesselring')]
+
+In [15]: for author in ath2:
+    ...:     author.books
+    ...:
+
+In [16]: for author in ath2:
+    ...:     print(author.books)
+    ...:
+[Books('Catch-22', '0684833395')]
+[Books('Heart of Darkness', '1892295490'), Books('Lord Jim', '1551111721'), Books('Heart of Darkness', '0451526570')]
+[Books('The Onion Field', '0385341598')]
+[Books('The Daughter of Time', '0684803860')]
+[Books('The Orenda', '0670064181'), Books('Three Day Road', '0143017861'), Books('Through Black Spruce', '0670020575')]
+[Books('Dreamless', '0062012010'), Books('Goddess', '0062012037'), Books('Starcrossed', '0062011995')]
+[Books('Netherland', '0307377040')]
+[Books('Arsenic and Old Lace', '0856761222')]
+
+In [17]: for author in ath2:
+    ...:     print(f"[-] {author.name}: \n{author.books}")
+    ...:
+[-] Joseph Heller:
+[Books('Catch-22', '0684833395')]
+[-] Joseph Conrad:
+[Books('Heart of Darkness', '1892295490'), Books('Lord Jim', '1551111721'), Books('Heart of Darkness', '0451526570')]
+[-] Joseph Wambaugh:
+[Books('The Onion Field', '0385341598')]
+[-] Josephine Tey:
+[Books('The Daughter of Time', '0684803860')]
+[-] Joseph Boyden:
+[Books('The Orenda', '0670064181'), Books('Three Day Road', '0143017861'), Books('Through Black Spruce', '0670020575')]
+[-] Josephine Angelini:
+[Books('Dreamless', '0062012010'), Books('Goddess', '0062012037'), Books('Starcrossed', '0062011995')]
+[-] Joseph O'Neill:
+[Books('Netherland', '0307377040')]
+[-] Joseph Kesselring:
+[Books('Arsenic and Old Lace', '0856761222')]
+
+In [18]: for ath in ath2:
+    ...:     bk = ath.books
+    ...:     for b in bk:
+    ...:         print(f"[-] {ath.name}, Published in: {b.years.year_pub}, {b.title}")
+    ...:
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+<ipython-input-18-60cf5a6a577b> in <module>
+      2     bk = ath.books
+      3     for b in bk:
+----> 4         print(f"[-] {ath.name}, Published in: {b.years.year_pub}, {b.title}")
+      5
+
+AttributeError: 'Books' object has no attribute 'years'
+
+In [19]: for ath in ath2:
+    ...:     bk = ath.books
+    ...:     for b in bk:
+    ...:         id = b.year_id
+    ...:         yr = Years.query.get(id)
+    ...:         print(f"[-] {ath.name}, Published in: {yr.year_pub}, {b.title}")
+    ...:
+    ...:
+[-] Joseph Heller, Published in: 1961, Catch-22
+[-] Joseph Conrad, Published in: 1899, Heart of Darkness
+[-] Joseph Conrad, Published in: 1900, Lord Jim
+[-] Joseph Conrad, Published in: 1910, Heart of Darkness
+[-] Joseph Wambaugh, Published in: 1973, The Onion Field
+[-] Josephine Tey, Published in: 1951, The Daughter of Time
+[-] Joseph Boyden, Published in: 2013, The Orenda
+[-] Joseph Boyden, Published in: 2005, Three Day Road
+[-] Joseph Boyden, Published in: 2008, Through Black Spruce
+[-] Josephine Angelini, Published in: 2012, Dreamless
+[-] Josephine Angelini, Published in: 2013, Goddess
+[-] Josephine Angelini, Published in: 2011, Starcrossed
+[-] Joseph O'Neill, Published in: 2008, Netherland
+[-] Joseph Kesselring, Published in: 1939, Arsenic and Old Lace
+
+In [20]:

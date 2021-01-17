@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h3>Book Details</h3> 
+  <div class="list-group">
+    <a href="#" class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">Author: {{ ath }}</h5>
+            <small>ISBN: {{ book_id }}</small>
+        </div>
+        <p class="mb-1">Title: {{ bk_name }}</p>
+        <p class="mb-1">Goodreads Average Rating: {{ avg_score }}</p>
+        <p class="mb-1">Goodreads Total Rating Counts: {{ num_ratings }}</p>
+        <small>Year Published: {{ year }}</small>
+    </a>
+  </div>
+  <br>
+
+  <!-- if there is any review by user for the book -->
+  {% if rating %}
+  <div class="list-group">
+    <a href="#" class="list-group-item list-group-item-action">
+        <p class="mb-1">User Rating: {{ rating }}</p>
+        <p class="mb-1">User Review:</p>
+        <p class="mb-1">{{ content }}</p>
+    </a>
+  </div>
+  {% else %}
+    <h6>There is no review by User. Would like to have one?</h6>
+  <!-- Review form if there is no user review -->
+
+    <form method="POST" action="">
+      {{ form.hidden_tag() }}
+      <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Post Review</legend>
+
+        <div class="form-group">
+          {{ form.rating.label(class="form-control-label") }}
+          {% if form.rating.errors %}
+            {{ form.rating(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.rating.errors %}
+	            <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            {{ form.rating(class="form-control form-control-lg") }}
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          {{ form.review.label(class="form-control-label") }}
+          {% if form.review.errors %}
+            {{ form.review(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.review.errors %}
+	            <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            {{ form.review(class="form-control form-control-lg") }}
+          {% endif %}
+        </div>
+
+      </fieldset>
+      <div class="form-group">
+        {{ form.submit(class="btn btn-outline-info") }}
+      </div>
+    </form>
+  {% endif %}
+
+{% endblock content %}
+
+{% block trivia %}
+  {{ trivia }}
+{% endblock trivia %}

@@ -1,0 +1,1425 @@
+
+
+(base) ╭─arunkhattri@nakedgun ~
+╰─$ conda activate pyenv36
+(pyenv36) ╭─arunkhattri@nakedgun ~
+╰─$ cd github/cs50/Project_01/Bibliosmia
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/Bibliosmia ‹master*›
+╰─$ ls
+bibliosmia  books.csv  config.py  dbLike.txt  db.txt  dir_str.png  inserts.py  inserts.py~  __pycache__  requirements.txt  run.py
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/Bibliosmia ‹master*›
+╰─$ clear
+
+
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/Bibliosmia ‹master*›
+╰─$ ipython
+Python 3.7.2 (default, Dec 29 2018, 06:19:36)
+Type 'copyright', 'credits' or 'license' for more information
+IPython 7.3.0 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: from bibliosmia import db
+/home/arunkhattri/anaconda3/envs/pyenv36/lib/python3.7/site-packages/flask_sqlalchemy/__init__.py:794: FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhea
+d and will be disabled by default in the future.  Set it to True or False to suppress this warning.
+  'SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and '
+
+In [2]: from bibliosmia.models import Books, Authors, Years
+
+In [3]: ath = Authors.query.filter(Authors.name.like("%Joseph%")).all()
+
+In [4]: ath
+Out[4]:
+[Authors('Joseph Heller'),
+ Authors('Joseph Conrad'),
+ Authors('Joseph Wambaugh'),
+ Authors('Josephine Tey'),
+ Authors('Joseph Boyden'),
+ Authors('Josephine Angelini'),
+ Authors('Joseph O'Neill'),
+ Authors('Joseph Kesselring')]
+
+In [5]: tbl = Authors.query.filter(Authors.name.like("%Joseph%")).join(Books, Authors.id==Books.author_id).all()
+
+In [6]: tbl
+Out[6]:
+[Authors('Joseph Heller'),
+ Authors('Joseph Conrad'),
+ Authors('Joseph Wambaugh'),
+ Authors('Josephine Tey'),
+ Authors('Joseph Boyden'),
+ Authors('Josephine Angelini'),
+ Authors('Joseph O'Neill'),
+ Authors('Joseph Kesselring')]
+
+In [7]: tbl = Authors.query.join(Books) \
+   ...: .filter(Authors.name.like("%Joseph%")).join(Years, Books.year_id==Years.id).all()
+
+In [8]: tbl
+Out[8]:
+[Authors('Joseph Heller'),
+ Authors('Joseph Conrad'),
+ Authors('Joseph Wambaugh'),
+ Authors('Josephine Tey'),
+ Authors('Joseph Boyden'),
+ Authors('Josephine Angelini'),
+ Authors('Joseph O'Neill'),
+ Authors('Joseph Kesselring')]
+
+In [9]: tbl = Authors.query.join(Books).join(Years).filter(Authors.name.like("%Joseph%")).all()
+
+In [10]: tbl
+Out[10]:
+[Authors('Joseph Heller'),
+ Authors('Joseph Conrad'),
+ Authors('Joseph Wambaugh'),
+ Authors('Josephine Tey'),
+ Authors('Joseph Boyden'),
+ Authors('Josephine Angelini'),
+ Authors('Joseph O'Neill'),
+ Authors('Joseph Kesselring')]
+
+In [11]: tbl.books
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+<ipython-input-11-953f2383386c> in <module>
+----> 1 tbl.books
+
+AttributeError: 'list' object has no attribute 'books'
+
+In [12]: ath = Authors.query.filter(Authors.name.like("%Joseph%")).first()
+
+In [13]: ath.books
+Out[13]: [Books('Catch-22', '0684833395')]
+
+In [14]: ath.books.year_id
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+<ipython-input-14-c3dabb0bc428> in <module>
+----> 1 ath.books.year_id
+
+AttributeError: 'InstrumentedList' object has no attribute 'year_id'
+
+In [15]: ath.books.id
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+<ipython-input-15-1bbb714f7fb6> in <module>
+----> 1 ath.books.id
+
+AttributeError: 'InstrumentedList' object has no attribute 'id'
+
+In [16]: tbl = Authors.query.join(Books, Author.id==Book.author_id).join(Years, Books.year_id==Years.year_pub).filter(Authors.name.like("%Joseph%")).all()
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+<ipython-input-16-638101c3752a> in <module>
+----> 1 tbl = Authors.query.join(Books, Author.id==Book.author_id).join(Years, Books.year_id==Years.year_pub).filter(Authors.name.like("%Joseph%")).all()
+
+NameError: name 'Author' is not defined
+
+In [17]: tbl = Authors.query.join(Books, Authors.id==Book.author_id).join(Years, Books.year_id==Years.year_pub).filter(Authors.name.like("%Joseph%")).all()
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+<ipython-input-17-98fe256b0465> in <module>
+----> 1 tbl = Authors.query.join(Books, Authors.id==Book.author_id).join(Years, Books.year_id==Years.year_pub).filter(Authors.name.like("%Joseph%")).all()
+
+NameError: name 'Book' is not defined
+
+In [18]: tbl = Authors.query.join(Books, Authors.id==Books.author_id).join(Years, Books.year_id==Years.year_pub).filter(Authors.name.like("%Joseph%")).all()
+
+In [19]: tbl
+Out[19]: []
+
+In [20]: db.session.query(Authors.name).filter_by(Authors.name=="Joseph Heller")
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-20-6c7afc432710> in <module>
+----> 1 db.session.query(Authors.name).filter_by(Authors.name=="Joseph Heller")
+
+TypeError: filter_by() takes 1 positional argument but 2 were given
+
+In [21]: db.session.query(Authors.name).filter_by("Joseph Heller")
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-21-bb13f3ca3f2d> in <module>
+----> 1 db.session.query(Authors.name).filter_by("Joseph Heller")
+
+TypeError: filter_by() takes 1 positional argument but 2 were given
+
+In [22]: db.session.query(Authors.name).filter(Authors.name=="Joseph Heller")
+Out[22]: <flask_sqlalchemy.BaseQuery at 0x7f4af549c358>
+
+In [23]: db.session.query(Authors.name).filter(Authors.name=="Joseph Heller").all()
+Out[23]: [('Joseph Heller')]
+
+In [24]: db.session.query(Authors).filter(Authors.name=="Joseph Heller").all()
+Out[24]: [Authors('Joseph Heller')]
+
+In [25]: tbl = db.session.query(Books).join(Years, Years.year_pub==Books.year_id).join(Authors,Authors.id==Books.author_id).filter(Authors.name.like("%Joseph%")).all()
+
+In [26]: tbl
+Out[26]: []
+
+In [27]: tbl = db.session.query(Books).join(Years, Years.year_pub==Books.year_id).filter(Authors.name.like("%Joseph%")).all()
+
+In [28]: tbl
+Out[28]: []
+
+In [29]: yrs = Years.query.filter_by(pub_year=2018).all()
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/base.py in _entity_descriptor(entity, key)
+    398     try:
+--> 399         return getattr(entity, key)
+    400     except AttributeError:
+
+AttributeError: type object 'Years' has no attribute 'pub_year'
+
+During handling of the above exception, another exception occurred:
+
+InvalidRequestError                       Traceback (most recent call last)
+<ipython-input-29-b7a7be6f7639> in <module>
+----> 1 yrs = Years.query.filter_by(pub_year=2018).all()
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/query.py in filter_by(self, **kwargs)
+   1790         clauses = [
+   1791             _entity_descriptor(self._joinpoint_zero(), key) == value
+-> 1792             for key, value in kwargs.items()
+   1793         ]
+   1794         return self.filter(sql.and_(*clauses))
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/query.py in <listcomp>(.0)
+   1790         clauses = [
+   1791             _entity_descriptor(self._joinpoint_zero(), key) == value
+-> 1792             for key, value in kwargs.items()
+   1793         ]
+   1794         return self.filter(sql.and_(*clauses))
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/base.py in _entity_descriptor(entity, key)
+    400     except AttributeError:
+    401         raise sa_exc.InvalidRequestError(
+--> 402             "Entity '%s' has no property '%s'" % (description, key)
+    403         )
+    404
+
+InvalidRequestError: Entity '<class 'bibliosmia.models.Years'>' has no property 'pub_year'
+
+In [30]: yrs = Years.query.filter_by(year_pub=2018).all()
+
+In [31]: yrs
+Out[31]: []
+
+In [32]: yrs = Years.query.filter_by(year_pub=2016).all()
+
+In [33]: yrs
+Out[33]: [Years('2016')]
+
+In [34]: yrs.books
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+<ipython-input-34-6da22c00f7c6> in <module>
+----> 1 yrs.books
+
+AttributeError: 'list' object has no attribute 'books'
+
+In [35]: yrs = Years.query.filter_by(year_pub=2016).first()
+
+In [36]: yrs.books
+Out[36]:
+[Books('Lady Midnight', '1442468351'),
+ Books('Tell Me Three Things', '0553535641'),
+ Books('Truly Madly Guilty', '1250069793'),
+ Books('The Sound of Gravel', '1250077699'),
+ Books('Nutshell', '0385542070'),
+ Books('Big Rock', '0692572031'),
+ Books('Calamity', '0385743602'),
+ Books('The Last Star', '0399162437'),
+ Books('Stars Above', '1250091845'),
+ Books('Eligible', '1400068320'),
+ Books('Cometh the Hour', '1466867507'),
+ Books('The Raven King', '0545424984'),
+ Books('The Woman in Cabin 10', '1501132938'),
+ Books('This Savage Song', '0062380877'),
+ Books('Magic Binds', '0425270696'),
+ Books('Broken prince', '1682305031'),
+ Books('Scrappy Little Nobody', '1501117203'),
+ Books('Commonwealth', '0062491792'),
+ Books('Love Warrior', '1250128544'),
+ Books('The Princess Diarist', '0399173595'),
+ Books('Night School', '0804192979'),
+ Books('The Passenger', '1451686633'),
+ Books('I Let You Go', '0751554154'),
+ Books('Sweetbitter', '1101875941'),
+ Books('Holding Up the Universe', '0385755929'),
+ Books('Find Her', '0525954570'),
+ Books('Bay of Sighs', '042528011X'),
+ Books('Underground Airlines', '0316261246'),
+ Books('One With You', '1250109302'),
+ Books('This Is Where It Ends', '149262246X'),
+ Books('Don't You Cry', '0778319059'),
+ Books('The Forgetting Time', '1250076420'),
+ Books('The Obsession', '0399175164'),
+ Books('RoomHate', '1523662441'),
+ Books('The North Water', '1627795944'),
+ Books('Feverborn', '0385344422'),
+ Books('Vinegar Girl', '0804141266'),
+ Books('Turbo Twenty-Three', '0345543009'),
+ Books('Another Brooklyn', '0062359983'),
+ Books('The Crown', '0062392174'),
+ Books('News of the World', '0062409204'),
+ Books('Behind Closed Doors', '1250121000'),
+ Books('The Nix', '110194661X'),
+ Books('The Winner's Kiss', '0374384738'),
+ Books('Dirty', '1250083214'),
+ Books('Fool Me Once', '0525955097'),
+ Books('Babylon's Ashes', '0356504263'),
+ Books('LaRose', '0062277022'),
+ Books('Passenger', '1484715772'),
+ Books('The Kept Woman', '0062430211'),
+ Books('You'll Grow Out of It', '1455531189'),
+ Books('The Rose & the Dagger', '0399171622'),
+ Books('Glass Sword', '0062310666'),
+ Books('A Gentleman in Moscow', '0670026190'),
+ Books('Fire Touched', '0425256766'),
+ Books('Heartless', '1250044650'),
+ Books('The Nest', '0062414216'),
+ Books('Rebel of the Sands', '0698410424'),
+ Books('Lily and the Octopus', '1501126229'),
+ Books('End of Watch', '1501129740'),
+ Books('Born to Run', '1501141511'),
+ Books('The Beast', '045147516X'),
+ Books('Brotherhood in Death', '0399170898'),
+ Books('The Girls', '081299860X'),
+ Books('The Mothers', '0399184511'),
+ Books('The Sun Is Also a Star', '0553496689'),
+ Books('Orphan X', '1250067847'),
+ Books('Swing Time', '0241144159'),
+ Books('The City of Mirrors', '034550500X'),
+ Books('Marked in Flesh', '0451474473'),
+ Books('The Last Mile', '1455566020'),
+ Books('The Fireman', '0062200631'),
+ Books('Salt to the Sea', '0399160302'),
+ Books('Modern Lovers', '159463467X'),
+ Books('The Bird and the Sword', '1533134138'),
+ Books('Before the Fall', '1455561789'),
+ Books('Dark Matter', '1101904224'),
+ Books('The Hidden Oracle', '148473274X'),
+ Books('The Obelisk Gate', '0356508366'),
+ Books('Staked', '0345548515'),
+ Books('The Wonder', '0316393878'),
+ Books('Twisted Palace', '1682305066'),
+ Books('Miller's Valley', '0812996089'),
+ Books('Lilac Girls', '1101883073'),
+ Books('Good as Gone', '0544920953'),
+ Books('The Black Widow', '006232022X'),
+ Books('The Widow', '1101990260'),
+ Books('Lab Girl', '1101874937'),
+ Books('You Will Know Me', '031623107X'),
+ Books('The Couple Next Door', '0735221081'),
+ Books('Sleeping Giants', '1101886692'),
+ Books('Empire of Storms', '1619636077'),
+ Books('Morning Star', '0345539842'),
+ Books('Homegoing', '1101947136'),
+ Books('Home ', '0525955100'),
+ Books('A Great Reckoning', '1250022134'),
+ Books('Kings Rising', '174348495X'),
+ Books('The Hammer of Thor', '1423160924')]
+
+In [37]: db.execute("SELECT * FROM years WHERE (year_pub = 2016)")
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+<ipython-input-37-953761784d5c> in <module>
+----> 1 db.execute("SELECT * FROM years WHERE (year_pub = 2016)")
+
+AttributeError: 'SQLAlchemy' object has no attribute 'execute'
+
+In [38]: db.session.execute("SELECT * FROM years WHERE (year_pub = 2016)")
+Out[38]: <sqlalchemy.engine.result.ResultProxy at 0x7f4af56e1320>
+
+In [39]: db.session.execute("SELECT * FROM years WHERE (year_pub = 2016)").all()
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+<ipython-input-39-daed3a12c428> in <module>
+----> 1 db.session.execute("SELECT * FROM years WHERE (year_pub = 2016)").all()
+
+AttributeError: 'ResultProxy' object has no attribute 'all'
+
+In [40]: db.session.execute("SELECT * FROM years WHERE (year_pub = 2016)").first()
+Out[40]: (10, 2016)
+
+In [41]: statement = "SELECT years.year_pub books.isbn books.title books.author FROM years WHERE (year_pub=2016) INNER JOIN books ON years.year_pub=books.year_id"
+
+In [42]: db.session.execute(statement).all()
+---------------------------------------------------------------------------
+OperationalError                          Traceback (most recent call last)
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1243                     self.dialect.do_execute(
+-> 1244                         cursor, statement, parameters, context
+   1245                     )
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/default.py in do_execute(self, cursor, statement, parameters, context)
+    551     def do_execute(self, cursor, statement, parameters, context=None):
+--> 552         cursor.execute(statement, parameters)
+    553
+
+OperationalError: near ".": syntax error
+
+The above exception was the direct cause of the following exception:
+
+OperationalError                          Traceback (most recent call last)
+<ipython-input-42-c9552221ef9d> in <module>
+----> 1 db.session.execute(statement).all()
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/scoping.py in do(self, *args, **kwargs)
+    160 def instrument(name):
+    161     def do(self, *args, **kwargs):
+--> 162         return getattr(self.registry(), name)(*args, **kwargs)
+    163
+    164     return do
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/session.py in execute(self, clause, params, mapper, bind, **kw)
+   1266
+   1267         return self._connection_for_bind(bind, close_with_result=True).execute(
+-> 1268             clause, params or {}
+   1269         )
+   1270
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in execute(self, object_, *multiparams, **params)
+    986             raise exc.ObjectNotExecutableError(object_)
+    987         else:
+--> 988             return meth(self, multiparams, params)
+    989
+    990     def _execute_function(self, func, multiparams, params):
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/sql/elements.py in _execute_on_connection(self, connection, multiparams, params)
+    285     def _execute_on_connection(self, connection, multiparams, params):
+    286         if self.supports_execution:
+--> 287             return connection._execute_clauseelement(self, multiparams, params)
+    288         else:
+    289             raise exc.ObjectNotExecutableError(self)
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_clauseelement(self, elem, multiparams, params)
+   1105             distilled_params,
+   1106             compiled_sql,
+-> 1107             distilled_params,
+   1108         )
+   1109         if self._has_events or self.engine._has_events:
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1246         except BaseException as e:
+   1247             self._handle_dbapi_exception(
+-> 1248                 e, statement, parameters, cursor, context
+   1249             )
+   1250
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _handle_dbapi_exception(self, e, statement, parameters, cursor, context)
+   1464                 util.raise_from_cause(newraise, exc_info)
+   1465             elif should_wrap:
+-> 1466                 util.raise_from_cause(sqlalchemy_exception, exc_info)
+   1467             else:
+   1468                 util.reraise(*exc_info)
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/util/compat.py in raise_from_cause(exception, exc_info)
+    381     exc_type, exc_value, exc_tb = exc_info
+    382     cause = exc_value if exc_value is not exception else None
+--> 383     reraise(type(exception), exception, tb=exc_tb, cause=cause)
+    384
+    385
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/util/compat.py in reraise(tp, value, tb, cause)
+    126             value.__cause__ = cause
+    127         if value.__traceback__ is not tb:
+--> 128             raise value.with_traceback(tb)
+    129         raise value
+    130
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1242                 if not evt_handled:
+   1243                     self.dialect.do_execute(
+-> 1244                         cursor, statement, parameters, context
+   1245                     )
+   1246         except BaseException as e:
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/default.py in do_execute(self, cursor, statement, parameters, context)
+    550
+    551     def do_execute(self, cursor, statement, parameters, context=None):
+--> 552         cursor.execute(statement, parameters)
+    553
+    554     def do_execute_no_params(self, cursor, statement, context=None):
+
+OperationalError: (sqlite3.OperationalError) near ".": syntax error
+[SQL: SELECT years.year_pub books.isbn books.title books.author FROM years WHERE (year_pub=2016) INNER JOIN books ON years.year_pub=books.year_id]
+(Background on this error at: http://sqlalche.me/e/e3q8)
+
+In [43]: statement = "SELECT years.year_pub books.isbn books.title books.author FROM years WHERE (year_pub=2016)"
+
+In [44]: db.session.execute(statement).all()
+---------------------------------------------------------------------------
+OperationalError                          Traceback (most recent call last)
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1243                     self.dialect.do_execute(
+-> 1244                         cursor, statement, parameters, context
+   1245                     )
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/default.py in do_execute(self, cursor, statement, parameters, context)
+    551     def do_execute(self, cursor, statement, parameters, context=None):
+--> 552         cursor.execute(statement, parameters)
+    553
+
+OperationalError: near ".": syntax error
+
+The above exception was the direct cause of the following exception:
+
+OperationalError                          Traceback (most recent call last)
+<ipython-input-44-c9552221ef9d> in <module>
+----> 1 db.session.execute(statement).all()
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/scoping.py in do(self, *args, **kwargs)
+    160 def instrument(name):
+    161     def do(self, *args, **kwargs):
+--> 162         return getattr(self.registry(), name)(*args, **kwargs)
+    163
+    164     return do
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/session.py in execute(self, clause, params, mapper, bind, **kw)
+   1266
+   1267         return self._connection_for_bind(bind, close_with_result=True).execute(
+-> 1268             clause, params or {}
+   1269         )
+   1270
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in execute(self, object_, *multiparams, **params)
+    986             raise exc.ObjectNotExecutableError(object_)
+    987         else:
+--> 988             return meth(self, multiparams, params)
+    989
+    990     def _execute_function(self, func, multiparams, params):
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/sql/elements.py in _execute_on_connection(self, connection, multiparams, params)
+    285     def _execute_on_connection(self, connection, multiparams, params):
+    286         if self.supports_execution:
+--> 287             return connection._execute_clauseelement(self, multiparams, params)
+    288         else:
+    289             raise exc.ObjectNotExecutableError(self)
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_clauseelement(self, elem, multiparams, params)
+   1105             distilled_params,
+   1106             compiled_sql,
+-> 1107             distilled_params,
+   1108         )
+   1109         if self._has_events or self.engine._has_events:
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1246         except BaseException as e:
+   1247             self._handle_dbapi_exception(
+-> 1248                 e, statement, parameters, cursor, context
+   1249             )
+   1250
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _handle_dbapi_exception(self, e, statement, parameters, cursor, context)
+   1464                 util.raise_from_cause(newraise, exc_info)
+   1465             elif should_wrap:
+-> 1466                 util.raise_from_cause(sqlalchemy_exception, exc_info)
+   1467             else:
+   1468                 util.reraise(*exc_info)
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/util/compat.py in raise_from_cause(exception, exc_info)
+    381     exc_type, exc_value, exc_tb = exc_info
+    382     cause = exc_value if exc_value is not exception else None
+--> 383     reraise(type(exception), exception, tb=exc_tb, cause=cause)
+    384
+    385
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/util/compat.py in reraise(tp, value, tb, cause)
+    126             value.__cause__ = cause
+    127         if value.__traceback__ is not tb:
+--> 128             raise value.with_traceback(tb)
+    129         raise value
+    130
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1242                 if not evt_handled:
+   1243                     self.dialect.do_execute(
+-> 1244                         cursor, statement, parameters, context
+   1245                     )
+   1246         except BaseException as e:
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/default.py in do_execute(self, cursor, statement, parameters, context)
+    550
+    551     def do_execute(self, cursor, statement, parameters, context=None):
+--> 552         cursor.execute(statement, parameters)
+    553
+    554     def do_execute_no_params(self, cursor, statement, context=None):
+
+OperationalError: (sqlite3.OperationalError) near ".": syntax error
+[SQL: SELECT years.year_pub books.isbn books.title books.author FROM years WHERE (year_pub=2016)]
+(Background on this error at: http://sqlalche.me/e/e3q8)
+
+In [45]: statement = "SELECT years.year_pub books.isbn books.title books.author_id FROM years WHERE (year_pub=2016)"
+
+In [46]: db.session.execute(statement).all()
+---------------------------------------------------------------------------
+OperationalError                          Traceback (most recent call last)
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1243                     self.dialect.do_execute(
+-> 1244                         cursor, statement, parameters, context
+   1245                     )
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/default.py in do_execute(self, cursor, statement, parameters, context)
+    551     def do_execute(self, cursor, statement, parameters, context=None):
+--> 552         cursor.execute(statement, parameters)
+    553
+
+OperationalError: near ".": syntax error
+
+The above exception was the direct cause of the following exception:
+
+OperationalError                          Traceback (most recent call last)
+<ipython-input-46-c9552221ef9d> in <module>
+----> 1 db.session.execute(statement).all()
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/scoping.py in do(self, *args, **kwargs)
+    160 def instrument(name):
+    161     def do(self, *args, **kwargs):
+--> 162         return getattr(self.registry(), name)(*args, **kwargs)
+    163
+    164     return do
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/session.py in execute(self, clause, params, mapper, bind, **kw)
+   1266
+   1267         return self._connection_for_bind(bind, close_with_result=True).execute(
+-> 1268             clause, params or {}
+   1269         )
+   1270
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in execute(self, object_, *multiparams, **params)
+    986             raise exc.ObjectNotExecutableError(object_)
+    987         else:
+--> 988             return meth(self, multiparams, params)
+    989
+    990     def _execute_function(self, func, multiparams, params):
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/sql/elements.py in _execute_on_connection(self, connection, multiparams, params)
+    285     def _execute_on_connection(self, connection, multiparams, params):
+    286         if self.supports_execution:
+--> 287             return connection._execute_clauseelement(self, multiparams, params)
+    288         else:
+    289             raise exc.ObjectNotExecutableError(self)
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_clauseelement(self, elem, multiparams, params)
+   1105             distilled_params,
+   1106             compiled_sql,
+-> 1107             distilled_params,
+   1108         )
+   1109         if self._has_events or self.engine._has_events:
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1246         except BaseException as e:
+   1247             self._handle_dbapi_exception(
+-> 1248                 e, statement, parameters, cursor, context
+   1249             )
+   1250
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _handle_dbapi_exception(self, e, statement, parameters, cursor, context)
+   1464                 util.raise_from_cause(newraise, exc_info)
+   1465             elif should_wrap:
+-> 1466                 util.raise_from_cause(sqlalchemy_exception, exc_info)
+   1467             else:
+   1468                 util.reraise(*exc_info)
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/util/compat.py in raise_from_cause(exception, exc_info)
+    381     exc_type, exc_value, exc_tb = exc_info
+    382     cause = exc_value if exc_value is not exception else None
+--> 383     reraise(type(exception), exception, tb=exc_tb, cause=cause)
+    384
+    385
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/util/compat.py in reraise(tp, value, tb, cause)
+    126             value.__cause__ = cause
+    127         if value.__traceback__ is not tb:
+--> 128             raise value.with_traceback(tb)
+    129         raise value
+    130
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1242                 if not evt_handled:
+   1243                     self.dialect.do_execute(
+-> 1244                         cursor, statement, parameters, context
+   1245                     )
+   1246         except BaseException as e:
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/default.py in do_execute(self, cursor, statement, parameters, context)
+    550
+    551     def do_execute(self, cursor, statement, parameters, context=None):
+--> 552         cursor.execute(statement, parameters)
+    553
+    554     def do_execute_no_params(self, cursor, statement, context=None):
+
+OperationalError: (sqlite3.OperationalError) near ".": syntax error
+[SQL: SELECT years.year_pub books.isbn books.title books.author_id FROM years WHERE (year_pub=2016)]
+(Background on this error at: http://sqlalche.me/e/e3q8)
+
+In [47]: statement = "SELECT years.year_pub books.isbn books.title books.author_id FROM years WHERE (year_pub=2016) INNER JOIN books ON years.year_pub=books.year_id"
+
+In [48]: db.session.execute(statement).all()
+---------------------------------------------------------------------------
+OperationalError                          Traceback (most recent call last)
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1243                     self.dialect.do_execute(
+-> 1244                         cursor, statement, parameters, context
+   1245                     )
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/default.py in do_execute(self, cursor, statement, parameters, context)
+    551     def do_execute(self, cursor, statement, parameters, context=None):
+--> 552         cursor.execute(statement, parameters)
+    553
+
+OperationalError: near ".": syntax error
+
+The above exception was the direct cause of the following exception:
+
+OperationalError                          Traceback (most recent call last)
+<ipython-input-48-c9552221ef9d> in <module>
+----> 1 db.session.execute(statement).all()
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/scoping.py in do(self, *args, **kwargs)
+    160 def instrument(name):
+    161     def do(self, *args, **kwargs):
+--> 162         return getattr(self.registry(), name)(*args, **kwargs)
+    163
+    164     return do
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/session.py in execute(self, clause, params, mapper, bind, **kw)
+   1266
+   1267         return self._connection_for_bind(bind, close_with_result=True).execute(
+-> 1268             clause, params or {}
+   1269         )
+   1270
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in execute(self, object_, *multiparams, **params)
+    986             raise exc.ObjectNotExecutableError(object_)
+    987         else:
+--> 988             return meth(self, multiparams, params)
+    989
+    990     def _execute_function(self, func, multiparams, params):
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/sql/elements.py in _execute_on_connection(self, connection, multiparams, params)
+    285     def _execute_on_connection(self, connection, multiparams, params):
+    286         if self.supports_execution:
+--> 287             return connection._execute_clauseelement(self, multiparams, params)
+    288         else:
+    289             raise exc.ObjectNotExecutableError(self)
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_clauseelement(self, elem, multiparams, params)
+   1105             distilled_params,
+   1106             compiled_sql,
+-> 1107             distilled_params,
+   1108         )
+   1109         if self._has_events or self.engine._has_events:
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1246         except BaseException as e:
+   1247             self._handle_dbapi_exception(
+-> 1248                 e, statement, parameters, cursor, context
+   1249             )
+   1250
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _handle_dbapi_exception(self, e, statement, parameters, cursor, context)
+   1464                 util.raise_from_cause(newraise, exc_info)
+   1465             elif should_wrap:
+-> 1466                 util.raise_from_cause(sqlalchemy_exception, exc_info)
+   1467             else:
+   1468                 util.reraise(*exc_info)
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/util/compat.py in raise_from_cause(exception, exc_info)
+    381     exc_type, exc_value, exc_tb = exc_info
+    382     cause = exc_value if exc_value is not exception else None
+--> 383     reraise(type(exception), exception, tb=exc_tb, cause=cause)
+    384
+    385
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/util/compat.py in reraise(tp, value, tb, cause)
+    126             value.__cause__ = cause
+    127         if value.__traceback__ is not tb:
+--> 128             raise value.with_traceback(tb)
+    129         raise value
+    130
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1242                 if not evt_handled:
+   1243                     self.dialect.do_execute(
+-> 1244                         cursor, statement, parameters, context
+   1245                     )
+   1246         except BaseException as e:
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/default.py in do_execute(self, cursor, statement, parameters, context)
+    550
+    551     def do_execute(self, cursor, statement, parameters, context=None):
+--> 552         cursor.execute(statement, parameters)
+    553
+    554     def do_execute_no_params(self, cursor, statement, context=None):
+
+OperationalError: (sqlite3.OperationalError) near ".": syntax error
+[SQL: SELECT years.year_pub books.isbn books.title books.author_id FROM years WHERE (year_pub=2016) INNER JOIN books ON years.year_pub=books.year_id]
+(Background on this error at: http://sqlalche.me/e/e3q8)
+
+In [49]: db.session.execute(statement).first()
+---------------------------------------------------------------------------
+OperationalError                          Traceback (most recent call last)
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1243                     self.dialect.do_execute(
+-> 1244                         cursor, statement, parameters, context
+   1245                     )
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/default.py in do_execute(self, cursor, statement, parameters, context)
+    551     def do_execute(self, cursor, statement, parameters, context=None):
+--> 552         cursor.execute(statement, parameters)
+    553
+
+OperationalError: near ".": syntax error
+
+The above exception was the direct cause of the following exception:
+
+OperationalError                          Traceback (most recent call last)
+<ipython-input-49-809e4b32d979> in <module>
+----> 1 db.session.execute(statement).first()
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/scoping.py in do(self, *args, **kwargs)
+    160 def instrument(name):
+    161     def do(self, *args, **kwargs):
+--> 162         return getattr(self.registry(), name)(*args, **kwargs)
+    163
+    164     return do
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/session.py in execute(self, clause, params, mapper, bind, **kw)
+   1266
+   1267         return self._connection_for_bind(bind, close_with_result=True).execute(
+-> 1268             clause, params or {}
+   1269         )
+   1270
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in execute(self, object_, *multiparams, **params)
+    986             raise exc.ObjectNotExecutableError(object_)
+    987         else:
+--> 988             return meth(self, multiparams, params)
+    989
+    990     def _execute_function(self, func, multiparams, params):
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/sql/elements.py in _execute_on_connection(self, connection, multiparams, params)
+    285     def _execute_on_connection(self, connection, multiparams, params):
+    286         if self.supports_execution:
+--> 287             return connection._execute_clauseelement(self, multiparams, params)
+    288         else:
+    289             raise exc.ObjectNotExecutableError(self)
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_clauseelement(self, elem, multiparams, params)
+   1105             distilled_params,
+   1106             compiled_sql,
+-> 1107             distilled_params,
+   1108         )
+   1109         if self._has_events or self.engine._has_events:
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1246         except BaseException as e:
+   1247             self._handle_dbapi_exception(
+-> 1248                 e, statement, parameters, cursor, context
+   1249             )
+   1250
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _handle_dbapi_exception(self, e, statement, parameters, cursor, context)
+   1464                 util.raise_from_cause(newraise, exc_info)
+   1465             elif should_wrap:
+-> 1466                 util.raise_from_cause(sqlalchemy_exception, exc_info)
+   1467             else:
+   1468                 util.reraise(*exc_info)
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/util/compat.py in raise_from_cause(exception, exc_info)
+    381     exc_type, exc_value, exc_tb = exc_info
+    382     cause = exc_value if exc_value is not exception else None
+--> 383     reraise(type(exception), exception, tb=exc_tb, cause=cause)
+    384
+    385
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/util/compat.py in reraise(tp, value, tb, cause)
+    126             value.__cause__ = cause
+    127         if value.__traceback__ is not tb:
+--> 128             raise value.with_traceback(tb)
+    129         raise value
+    130
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1242                 if not evt_handled:
+   1243                     self.dialect.do_execute(
+-> 1244                         cursor, statement, parameters, context
+   1245                     )
+   1246         except BaseException as e:
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/default.py in do_execute(self, cursor, statement, parameters, context)
+    550
+    551     def do_execute(self, cursor, statement, parameters, context=None):
+--> 552         cursor.execute(statement, parameters)
+    553
+    554     def do_execute_no_params(self, cursor, statement, context=None):
+
+OperationalError: (sqlite3.OperationalError) near ".": syntax error
+[SQL: SELECT years.year_pub books.isbn books.title books.author_id FROM years WHERE (year_pub=2016) INNER JOIN books ON years.year_pub=books.year_id]
+(Background on this error at: http://sqlalche.me/e/e3q8)
+
+In [50]: db.session.execute(statement).fetchall()
+---------------------------------------------------------------------------
+OperationalError                          Traceback (most recent call last)
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1243                     self.dialect.do_execute(
+-> 1244                         cursor, statement, parameters, context
+   1245                     )
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/default.py in do_execute(self, cursor, statement, parameters, context)
+    551     def do_execute(self, cursor, statement, parameters, context=None):
+--> 552         cursor.execute(statement, parameters)
+    553
+
+OperationalError: near ".": syntax error
+
+The above exception was the direct cause of the following exception:
+
+OperationalError                          Traceback (most recent call last)
+<ipython-input-50-b970980421b5> in <module>
+----> 1 db.session.execute(statement).fetchall()
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/scoping.py in do(self, *args, **kwargs)
+    160 def instrument(name):
+    161     def do(self, *args, **kwargs):
+--> 162         return getattr(self.registry(), name)(*args, **kwargs)
+    163
+    164     return do
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/session.py in execute(self, clause, params, mapper, bind, **kw)
+   1266
+   1267         return self._connection_for_bind(bind, close_with_result=True).execute(
+-> 1268             clause, params or {}
+   1269         )
+   1270
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in execute(self, object_, *multiparams, **params)
+    986             raise exc.ObjectNotExecutableError(object_)
+    987         else:
+--> 988             return meth(self, multiparams, params)
+    989
+    990     def _execute_function(self, func, multiparams, params):
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/sql/elements.py in _execute_on_connection(self, connection, multiparams, params)
+    285     def _execute_on_connection(self, connection, multiparams, params):
+    286         if self.supports_execution:
+--> 287             return connection._execute_clauseelement(self, multiparams, params)
+    288         else:
+    289             raise exc.ObjectNotExecutableError(self)
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_clauseelement(self, elem, multiparams, params)
+   1105             distilled_params,
+   1106             compiled_sql,
+-> 1107             distilled_params,
+   1108         )
+   1109         if self._has_events or self.engine._has_events:
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1246         except BaseException as e:
+   1247             self._handle_dbapi_exception(
+-> 1248                 e, statement, parameters, cursor, context
+   1249             )
+   1250
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _handle_dbapi_exception(self, e, statement, parameters, cursor, context)
+   1464                 util.raise_from_cause(newraise, exc_info)
+   1465             elif should_wrap:
+-> 1466                 util.raise_from_cause(sqlalchemy_exception, exc_info)
+   1467             else:
+   1468                 util.reraise(*exc_info)
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/util/compat.py in raise_from_cause(exception, exc_info)
+    381     exc_type, exc_value, exc_tb = exc_info
+    382     cause = exc_value if exc_value is not exception else None
+--> 383     reraise(type(exception), exception, tb=exc_tb, cause=cause)
+    384
+    385
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/util/compat.py in reraise(tp, value, tb, cause)
+    126             value.__cause__ = cause
+    127         if value.__traceback__ is not tb:
+--> 128             raise value.with_traceback(tb)
+    129         raise value
+    130
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1242                 if not evt_handled:
+   1243                     self.dialect.do_execute(
+-> 1244                         cursor, statement, parameters, context
+   1245                     )
+   1246         except BaseException as e:
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/default.py in do_execute(self, cursor, statement, parameters, context)
+    550
+    551     def do_execute(self, cursor, statement, parameters, context=None):
+--> 552         cursor.execute(statement, parameters)
+    553
+    554     def do_execute_no_params(self, cursor, statement, context=None):
+
+OperationalError: (sqlite3.OperationalError) near ".": syntax error
+[SQL: SELECT years.year_pub books.isbn books.title books.author_id FROM years WHERE (year_pub=2016) INNER JOIN books ON years.year_pub=books.year_id]
+(Background on this error at: http://sqlalche.me/e/e3q8)
+
+In [51]: statement = "SELECT years.year_pub books.isbn books.title books.author_id FROM years WHERE (year_pub=2016) LEFT JOIN books ON years.year_pub=books.year_id"
+
+In [52]: db.session.execute(statement).fetchall()
+---------------------------------------------------------------------------
+OperationalError                          Traceback (most recent call last)
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1243                     self.dialect.do_execute(
+-> 1244                         cursor, statement, parameters, context
+   1245                     )
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/default.py in do_execute(self, cursor, statement, parameters, context)
+    551     def do_execute(self, cursor, statement, parameters, context=None):
+--> 552         cursor.execute(statement, parameters)
+    553
+
+OperationalError: near ".": syntax error
+
+The above exception was the direct cause of the following exception:
+
+OperationalError                          Traceback (most recent call last)
+<ipython-input-52-b970980421b5> in <module>
+----> 1 db.session.execute(statement).fetchall()
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/scoping.py in do(self, *args, **kwargs)
+    160 def instrument(name):
+    161     def do(self, *args, **kwargs):
+--> 162         return getattr(self.registry(), name)(*args, **kwargs)
+    163
+    164     return do
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/session.py in execute(self, clause, params, mapper, bind, **kw)
+   1266
+   1267         return self._connection_for_bind(bind, close_with_result=True).execute(
+-> 1268             clause, params or {}
+   1269         )
+   1270
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in execute(self, object_, *multiparams, **params)
+    986             raise exc.ObjectNotExecutableError(object_)
+    987         else:
+--> 988             return meth(self, multiparams, params)
+    989
+    990     def _execute_function(self, func, multiparams, params):
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/sql/elements.py in _execute_on_connection(self, connection, multiparams, params)
+    285     def _execute_on_connection(self, connection, multiparams, params):
+    286         if self.supports_execution:
+--> 287             return connection._execute_clauseelement(self, multiparams, params)
+    288         else:
+    289             raise exc.ObjectNotExecutableError(self)
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_clauseelement(self, elem, multiparams, params)
+   1105             distilled_params,
+   1106             compiled_sql,
+-> 1107             distilled_params,
+   1108         )
+   1109         if self._has_events or self.engine._has_events:
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1246         except BaseException as e:
+   1247             self._handle_dbapi_exception(
+-> 1248                 e, statement, parameters, cursor, context
+   1249             )
+   1250
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _handle_dbapi_exception(self, e, statement, parameters, cursor, context)
+   1464                 util.raise_from_cause(newraise, exc_info)
+   1465             elif should_wrap:
+-> 1466                 util.raise_from_cause(sqlalchemy_exception, exc_info)
+   1467             else:
+   1468                 util.reraise(*exc_info)
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/util/compat.py in raise_from_cause(exception, exc_info)
+    381     exc_type, exc_value, exc_tb = exc_info
+    382     cause = exc_value if exc_value is not exception else None
+--> 383     reraise(type(exception), exception, tb=exc_tb, cause=cause)
+    384
+    385
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/util/compat.py in reraise(tp, value, tb, cause)
+    126             value.__cause__ = cause
+    127         if value.__traceback__ is not tb:
+--> 128             raise value.with_traceback(tb)
+    129         raise value
+    130
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1242                 if not evt_handled:
+   1243                     self.dialect.do_execute(
+-> 1244                         cursor, statement, parameters, context
+   1245                     )
+   1246         except BaseException as e:
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/default.py in do_execute(self, cursor, statement, parameters, context)
+    550
+    551     def do_execute(self, cursor, statement, parameters, context=None):
+--> 552         cursor.execute(statement, parameters)
+    553
+    554     def do_execute_no_params(self, cursor, statement, context=None):
+
+OperationalError: (sqlite3.OperationalError) near ".": syntax error
+[SQL: SELECT years.year_pub books.isbn books.title books.author_id FROM years WHERE (year_pub=2016) LEFT JOIN books ON years.year_pub=books.year_id]
+(Background on this error at: http://sqlalche.me/e/e3q8)
+
+In [53]: statement = "SELECT years.year_pub FROM years WHERE (year_pub=2016) LEFT JOIN books ON years.year_pub=books.year_id"
+
+In [54]: db.session.execute(statement).fetchall()
+---------------------------------------------------------------------------
+OperationalError                          Traceback (most recent call last)
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1243                     self.dialect.do_execute(
+-> 1244                         cursor, statement, parameters, context
+   1245                     )
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/default.py in do_execute(self, cursor, statement, parameters, context)
+    551     def do_execute(self, cursor, statement, parameters, context=None):
+--> 552         cursor.execute(statement, parameters)
+    553
+
+OperationalError: near "LEFT": syntax error
+
+The above exception was the direct cause of the following exception:
+
+OperationalError                          Traceback (most recent call last)
+<ipython-input-54-b970980421b5> in <module>
+----> 1 db.session.execute(statement).fetchall()
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/scoping.py in do(self, *args, **kwargs)
+    160 def instrument(name):
+    161     def do(self, *args, **kwargs):
+--> 162         return getattr(self.registry(), name)(*args, **kwargs)
+    163
+    164     return do
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/session.py in execute(self, clause, params, mapper, bind, **kw)
+   1266
+   1267         return self._connection_for_bind(bind, close_with_result=True).execute(
+-> 1268             clause, params or {}
+   1269         )
+   1270
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in execute(self, object_, *multiparams, **params)
+    986             raise exc.ObjectNotExecutableError(object_)
+    987         else:
+--> 988             return meth(self, multiparams, params)
+    989
+    990     def _execute_function(self, func, multiparams, params):
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/sql/elements.py in _execute_on_connection(self, connection, multiparams, params)
+    285     def _execute_on_connection(self, connection, multiparams, params):
+    286         if self.supports_execution:
+--> 287             return connection._execute_clauseelement(self, multiparams, params)
+    288         else:
+    289             raise exc.ObjectNotExecutableError(self)
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_clauseelement(self, elem, multiparams, params)
+   1105             distilled_params,
+   1106             compiled_sql,
+-> 1107             distilled_params,
+   1108         )
+   1109         if self._has_events or self.engine._has_events:
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1246         except BaseException as e:
+   1247             self._handle_dbapi_exception(
+-> 1248                 e, statement, parameters, cursor, context
+   1249             )
+   1250
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _handle_dbapi_exception(self, e, statement, parameters, cursor, context)
+   1464                 util.raise_from_cause(newraise, exc_info)
+   1465             elif should_wrap:
+-> 1466                 util.raise_from_cause(sqlalchemy_exception, exc_info)
+   1467             else:
+   1468                 util.reraise(*exc_info)
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/util/compat.py in raise_from_cause(exception, exc_info)
+    381     exc_type, exc_value, exc_tb = exc_info
+    382     cause = exc_value if exc_value is not exception else None
+--> 383     reraise(type(exception), exception, tb=exc_tb, cause=cause)
+    384
+    385
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/util/compat.py in reraise(tp, value, tb, cause)
+    126             value.__cause__ = cause
+    127         if value.__traceback__ is not tb:
+--> 128             raise value.with_traceback(tb)
+    129         raise value
+    130
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1242                 if not evt_handled:
+   1243                     self.dialect.do_execute(
+-> 1244                         cursor, statement, parameters, context
+   1245                     )
+   1246         except BaseException as e:
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/default.py in do_execute(self, cursor, statement, parameters, context)
+    550
+    551     def do_execute(self, cursor, statement, parameters, context=None):
+--> 552         cursor.execute(statement, parameters)
+    553
+    554     def do_execute_no_params(self, cursor, statement, context=None):
+
+OperationalError: (sqlite3.OperationalError) near "LEFT": syntax error
+[SQL: SELECT years.year_pub FROM years WHERE (year_pub=2016) LEFT JOIN books ON years.year_pub=books.year_id]
+(Background on this error at: http://sqlalche.me/e/e3q8)
+
+In [55]: statement = "SELECT years.year_pub FROM years WHERE (year_pub=2016) INNER JOIN books ON years.year_pub=books.year_id"
+
+In [56]: db.session.execute(statement).fetchall()
+---------------------------------------------------------------------------
+OperationalError                          Traceback (most recent call last)
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1243                     self.dialect.do_execute(
+-> 1244                         cursor, statement, parameters, context
+   1245                     )
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/default.py in do_execute(self, cursor, statement, parameters, context)
+    551     def do_execute(self, cursor, statement, parameters, context=None):
+--> 552         cursor.execute(statement, parameters)
+    553
+
+OperationalError: near "INNER": syntax error
+
+The above exception was the direct cause of the following exception:
+
+OperationalError                          Traceback (most recent call last)
+<ipython-input-56-b970980421b5> in <module>
+----> 1 db.session.execute(statement).fetchall()
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/scoping.py in do(self, *args, **kwargs)
+    160 def instrument(name):
+    161     def do(self, *args, **kwargs):
+--> 162         return getattr(self.registry(), name)(*args, **kwargs)
+    163
+    164     return do
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/session.py in execute(self, clause, params, mapper, bind, **kw)
+   1266
+   1267         return self._connection_for_bind(bind, close_with_result=True).execute(
+-> 1268             clause, params or {}
+   1269         )
+   1270
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in execute(self, object_, *multiparams, **params)
+    986             raise exc.ObjectNotExecutableError(object_)
+    987         else:
+--> 988             return meth(self, multiparams, params)
+    989
+    990     def _execute_function(self, func, multiparams, params):
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/sql/elements.py in _execute_on_connection(self, connection, multiparams, params)
+    285     def _execute_on_connection(self, connection, multiparams, params):
+    286         if self.supports_execution:
+--> 287             return connection._execute_clauseelement(self, multiparams, params)
+    288         else:
+    289             raise exc.ObjectNotExecutableError(self)
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_clauseelement(self, elem, multiparams, params)
+   1105             distilled_params,
+   1106             compiled_sql,
+-> 1107             distilled_params,
+   1108         )
+   1109         if self._has_events or self.engine._has_events:
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1246         except BaseException as e:
+   1247             self._handle_dbapi_exception(
+-> 1248                 e, statement, parameters, cursor, context
+   1249             )
+   1250
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _handle_dbapi_exception(self, e, statement, parameters, cursor, context)
+   1464                 util.raise_from_cause(newraise, exc_info)
+   1465             elif should_wrap:
+-> 1466                 util.raise_from_cause(sqlalchemy_exception, exc_info)
+   1467             else:
+   1468                 util.reraise(*exc_info)
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/util/compat.py in raise_from_cause(exception, exc_info)
+    381     exc_type, exc_value, exc_tb = exc_info
+    382     cause = exc_value if exc_value is not exception else None
+--> 383     reraise(type(exception), exception, tb=exc_tb, cause=cause)
+    384
+    385
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/util/compat.py in reraise(tp, value, tb, cause)
+    126             value.__cause__ = cause
+    127         if value.__traceback__ is not tb:
+--> 128             raise value.with_traceback(tb)
+    129         raise value
+    130
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1242                 if not evt_handled:
+   1243                     self.dialect.do_execute(
+-> 1244                         cursor, statement, parameters, context
+   1245                     )
+   1246         except BaseException as e:
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/default.py in do_execute(self, cursor, statement, parameters, context)
+    550
+    551     def do_execute(self, cursor, statement, parameters, context=None):
+--> 552         cursor.execute(statement, parameters)
+    553
+    554     def do_execute_no_params(self, cursor, statement, context=None):
+
+OperationalError: (sqlite3.OperationalError) near "INNER": syntax error
+[SQL: SELECT years.year_pub FROM years WHERE (year_pub=2016) INNER JOIN books ON years.year_pub=books.year_id]
+(Background on this error at: http://sqlalche.me/e/e3q8)
+
+In [57]: statement = "SELECT years.year_pub books.title FROM years  INNER JOIN books ON years.year_pub=books.year_id WHERE years.year_pub=2016"
+
+In [58]: db.session.execute(statement).fetchall()
+---------------------------------------------------------------------------
+OperationalError                          Traceback (most recent call last)
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1243                     self.dialect.do_execute(
+-> 1244                         cursor, statement, parameters, context
+   1245                     )
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/default.py in do_execute(self, cursor, statement, parameters, context)
+    551     def do_execute(self, cursor, statement, parameters, context=None):
+--> 552         cursor.execute(statement, parameters)
+    553
+
+OperationalError: near ".": syntax error
+
+The above exception was the direct cause of the following exception:
+
+OperationalError                          Traceback (most recent call last)
+<ipython-input-58-b970980421b5> in <module>
+----> 1 db.session.execute(statement).fetchall()
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/scoping.py in do(self, *args, **kwargs)
+    160 def instrument(name):
+    161     def do(self, *args, **kwargs):
+--> 162         return getattr(self.registry(), name)(*args, **kwargs)
+    163
+    164     return do
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/orm/session.py in execute(self, clause, params, mapper, bind, **kw)
+   1266
+   1267         return self._connection_for_bind(bind, close_with_result=True).execute(
+-> 1268             clause, params or {}
+   1269         )
+   1270
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in execute(self, object_, *multiparams, **params)
+    986             raise exc.ObjectNotExecutableError(object_)
+    987         else:
+--> 988             return meth(self, multiparams, params)
+    989
+    990     def _execute_function(self, func, multiparams, params):
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/sql/elements.py in _execute_on_connection(self, connection, multiparams, params)
+    285     def _execute_on_connection(self, connection, multiparams, params):
+    286         if self.supports_execution:
+--> 287             return connection._execute_clauseelement(self, multiparams, params)
+    288         else:
+    289             raise exc.ObjectNotExecutableError(self)
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_clauseelement(self, elem, multiparams, params)
+   1105             distilled_params,
+   1106             compiled_sql,
+-> 1107             distilled_params,
+   1108         )
+   1109         if self._has_events or self.engine._has_events:
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1246         except BaseException as e:
+   1247             self._handle_dbapi_exception(
+-> 1248                 e, statement, parameters, cursor, context
+   1249             )
+   1250
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _handle_dbapi_exception(self, e, statement, parameters, cursor, context)
+   1464                 util.raise_from_cause(newraise, exc_info)
+   1465             elif should_wrap:
+-> 1466                 util.raise_from_cause(sqlalchemy_exception, exc_info)
+   1467             else:
+   1468                 util.reraise(*exc_info)
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/util/compat.py in raise_from_cause(exception, exc_info)
+    381     exc_type, exc_value, exc_tb = exc_info
+    382     cause = exc_value if exc_value is not exception else None
+--> 383     reraise(type(exception), exception, tb=exc_tb, cause=cause)
+    384
+    385
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/util/compat.py in reraise(tp, value, tb, cause)
+    126             value.__cause__ = cause
+    127         if value.__traceback__ is not tb:
+--> 128             raise value.with_traceback(tb)
+    129         raise value
+    130
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/base.py in _execute_context(self, dialect, constructor, statement, parameters, *args)
+   1242                 if not evt_handled:
+   1243                     self.dialect.do_execute(
+-> 1244                         cursor, statement, parameters, context
+   1245                     )
+   1246         except BaseException as e:
+
+~/anaconda3/envs/pyenv36/lib/python3.7/site-packages/sqlalchemy/engine/default.py in do_execute(self, cursor, statement, parameters, context)
+    550
+    551     def do_execute(self, cursor, statement, parameters, context=None):
+--> 552         cursor.execute(statement, parameters)
+    553
+    554     def do_execute_no_params(self, cursor, statement, context=None):
+
+OperationalError: (sqlite3.OperationalError) near ".": syntax error
+[SQL: SELECT years.year_pub books.title FROM years  INNER JOIN books ON years.year_pub=books.year_id WHERE years.year_pub=2016]
+(Background on this error at: http://sqlalche.me/e/e3q8)
+
+In [59]: statement = "SELECT years.year_pub books.title FROM years  INNER JOIN books ON years.year_pub=books.year_id WHERE years.year_pub=2016"
+
+In [60]: db.session.execute("SELECT * FROM authors WHERE name='Joseph Heller').fetchall()
+  File "<ipython-input-60-7f803e43b8cd>", line 1
+    db.session.execute("SELECT * FROM authors WHERE name='Joseph Heller').fetchall()
+                                                                                    ^
+SyntaxError: EOL while scanning string literal
+
+
+In [61]: db.session.execute("SELECT * FROM authors WHERE name='Joseph Heller'").fetchall()
+Out[61]: [(38, 'Joseph Heller')]
+
+In [62]: aths = db.session.execute("SELECT * FROM authors WHERE name='Joseph Heller'").fetchall()
+
+In [63]: for ath in aths:
+    ...:     print(ath.id)
+    ...:
+38
+
+In [64]: db.session.execute("SELECT * FROM books WHERE author_id=38").fetchall()
+Out[64]: [(42, '0684833395', 'Catch-22', 38, 26)]
+
+In [65]: bk = db.session.execute("SELECT * FROM books WHERE author_id=38").fetchall()
+
+In [66]: bk.year_id
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+<ipython-input-66-db776b434fc8> in <module>
+----> 1 bk.year_id
+
+AttributeError: 'list' object has no attribute 'year_id'
+
+In [67]: bk = db.session.execute("SELECT * FROM books WHERE author_id=38").fetchone()
+
+In [68]: bk.year_id
+Out[68]: 26
+
+In [69]: yrs = db.session.execute("SELECT * FROM years WHERE id=26").fetchall()
+
+In [70]: yrs
+Out[70]: [(26, 1961)]
+
+In [71]:

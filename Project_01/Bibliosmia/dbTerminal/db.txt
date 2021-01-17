@@ -1,0 +1,282 @@
+
+(base) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/bibliosmia  ‹master*›
+╰─$ conda activate pyenv36
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/bibliosmia  ‹master*›
+╰─$ cd app
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/bibliosmia/app  ‹master*›
+╰─$ ls
+books.db  forms.py  __init__.py  __init__.py~  __pycache__  routes.py  routes.py~  static  templates
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/bibliosmia/app  ‹master*›
+╰─$ rm books.db
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/bibliosmia/app  ‹master*›
+╰─$ ls
+forms.py  __init__.py  __init__.py~  __pycache__  routes.py  routes.py~  static  templates
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/bibliosmia/app  ‹master*›
+╰─$ clear
+
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/bibliosmia/app  ‹master*›
+╰─$ ipython
+Python 3.7.2 (default, Dec 29 2018, 06:19:36)
+Type 'copyright', 'credits' or 'license' for more information
+IPython 7.3.0 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: from app.routes import db
+---------------------------------------------------------------------------
+ModuleNotFoundError                       Traceback (most recent call last)
+<ipython-input-1-7d9e453621b9> in <module>
+----> 1 from app.routes import db
+
+ModuleNotFoundError: No module named 'app'
+
+In [2]:
+Do you really want to exit ([y]/n)? y
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/bibliosmia/app  ‹master*›
+╰─$ clear
+
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/bibliosmia/app  ‹master*›
+╰─$ cd ..
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/bibliosmia  ‹master*›
+╰─$ ipython
+Python 3.7.2 (default, Dec 29 2018, 06:19:36)
+Type 'copyright', 'credits' or 'license' for more information
+IPython 7.3.0 -- An enhanced Interactive Python. Type '?' for help.
+
+/home/arunkhattri/anaconda3/envs/pyenv36/lib/python3.7/site-packages/flask_sqlalchemy/__init__.py:794: FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhea
+d and will be disabled by default in the future.  Set it to True or False to suppress this warning.
+  'SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and '
+In [1]: from app.routes import db
+
+In [2]: db.create_all()
+
+In [3]: from app.routes import User, Books, Authors, Years, Review
+
+In [4]: usr1 = User(username='maira', email='maira@example.com', password='password')
+
+In [5]: usr2 = User(username='inoo', email='inoo@example.com', password='password')
+
+In [6]: db.session.add_all([usr1, usr2])
+
+In [7]: db.session.commit()
+
+In [8]: User.query.all()
+Out[8]:
+[User('maira', 'maira@example.com', 'default.jpg'),
+ User('inoo', 'inoo@example.com', 'default.jpg')]
+
+In [9]: Authors(name='Raymond E. Feist')
+Out[9]: <Authors (transient 140481099308784)>
+
+In [10]: Authors(name='Susan Cooper')
+Out[10]: <Authors (transient 140481099306096)>
+
+In [11]: auth1 = Authors(name='Susan Cooper')
+
+In [12]: auth2 = Authors(name='Raymond E. Feist')
+
+In [13]: auth3 = Authors(name='Terry Brooks')
+
+In [14]: auth4 = Authors(name='Isaac Asimov')
+
+In [15]: db.session.add_all([auth1, auth2, auth3, auth4])
+
+In [16]: db.session.commit()
+
+In [17]: Authors.query.all()
+Out[17]: [<Authors 1>, <Authors 2>, <Authors 3>, <Authors 4>]
+
+In [18]:
+Do you really want to exit ([y]/n)? y
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/bibliosmia  ‹master*›
+╰─$ clear
+
+(pyenv36) ╭─arunkhattri@nakedgun ~/github/cs50/Project_01/bibliosmia  ‹master*›
+╰─$ ipython
+Python 3.7.2 (default, Dec 29 2018, 06:19:36)
+Type 'copyright', 'credits' or 'license' for more information
+IPython 7.3.0 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: from app.routes import User, Books, Authors, Years, Review
+/home/arunkhattri/anaconda3/envs/pyenv36/lib/python3.7/site-packages/flask_sqlalchemy/__init__.py:794: FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhea
+d and will be disabled by default in the future.  Set it to True or False to suppress this warning.
+  'SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and '
+
+In [2]: User.query.all()
+Out[2]:
+[User('maira', 'maira@example.com', 'default.jpg'),
+ User('inoo', 'inoo@example.com', 'default.jpg')]
+
+In [3]: Authors.query.all()
+Out[3]:
+[Authors('Susan Cooper'),
+ Authors('Raymond E. Feist'),
+ Authors('Terry Brooks'),
+ Authors('Isaac Asimov')]
+
+In [4]: yr1 = Years(year_pub=1998)
+
+In [5]: yr2 = Years(year_pub=1973)
+
+In [6]: yr3 = Years(year_pub=1987)
+
+In [7]: yr4 = Years(year_pub=1950)
+
+In [8]: from app.routes import db
+
+In [9]: db.session.add_all([yr1, yr2, yr3, yr4])
+
+In [10]: db.session.commit()
+
+In [11]: Years.query.all()
+Out[11]: [Years('1998'), Years('1973'), Years('1987'), Years('1950')]
+
+In [12]: usr = User.query.get(1)
+
+In [13]: usr
+Out[13]: User('maira', 'maira@example.com', 'default.jpg')
+
+In [14]: usr.reviews
+Out[14]: []
+
+In [15]:  ath = Authors.query.get(1)
+
+In [16]: ath
+Out[16]: Authors('Susan Cooper')
+
+In [17]: ath.id
+Out[17]: 1
+
+In [18]: yr = Years.query.filter_by(year_pub==1973)
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+<ipython-input-18-c42b7cbf32c1> in <module>
+----> 1 yr = Years.query.filter_by(year_pub==1973)
+
+NameError: name 'year_pub' is not defined
+
+In [19]: yr = Years.query.filter_by(year_pub=1973)
+
+In [20]: yr
+Out[20]: <flask_sqlalchemy.BaseQuery at 0x7f5466486b70>
+
+In [21]: yr.id
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+<ipython-input-21-b5ed8e696d3c> in <module>
+----> 1 yr.id
+
+AttributeError: 'BaseQuery' object has no attribute 'id'
+
+In [22]: yr = Years.query.filter_by(year_pub=1973).first()
+
+In [23]: yr
+Out[23]: Years('1973')
+
+In [24]: yr.id
+Out[24]: 2
+
+In [25]: book1 = Books(isbn='1416949658', title= 'The Dark Is Rising', author_id=ath.id, year_id=yr.id)
+
+In [26]: db.session.add(book1)
+
+In [27]: db.session.commit()
+
+In [28]: Books.query.all()
+Out[28]: [Books('The Dark Is Rising', '1416949658')]
+
+In [29]: bk = Books.query.get(1)
+
+In [30]: bk
+Out[30]: Books('The Dark Is Rising', '1416949658')
+
+In [31]: rv = Review(user_id=usr.id, book_id=bk.id, rating=5, content='This book had way too much violence and behaviourial issues, would not recommend for a child.')
+
+In [32]: db.session.add(rv)
+
+In [33]: db.session.commit()
+
+In [34]: ath = Authors.query.filter_by(LIKE(Raymond + "%"))
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+<ipython-input-34-e2c3f73fd8f0> in <module>
+----> 1 ath = Authors.query.filter_by(LIKE(Raymond + "%"))
+
+NameError: name 'LIKE' is not defined
+
+In [35]: Users.query.all()
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+<ipython-input-35-dffcf27c3507> in <module>
+----> 1 Users.query.all()
+
+NameError: name 'Users' is not defined
+
+In [36]: User.query.all()
+Out[36]:
+[User('maira', 'maira@example.com', 'default.jpg'),
+ User('inoo', 'inoo@example.com', 'default.jpg')]
+
+In [37]: Authors.query.all()
+Out[37]:
+[Authors('Susan Cooper'),
+ Authors('Raymond E. Feist'),
+ Authors('Terry Brooks'),
+ Authors('Isaac Asimov')]
+
+In [38]: ath = Authors.query.get(2)
+
+In [39]: ath
+Out[39]: Authors('Raymond E. Feist')
+
+In [40]: yr = Years.query.filter_by(year_pub=1998).first()
+
+In [41]: yr
+Out[41]: Years('1998')
+
+In [42]: book1 = Books(isbn='0380795272', title= 'Krondor: The Betrayal', author_id=ath.id, year_id=yr.id)
+
+In [43]: db.session.add(book1)
+
+In [44]: db.session.commit()
+
+In [45]: usr = User.query.ge
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+<ipython-input-45-063de8d3c85b> in <module>
+----> 1 usr = User.query.ge
+
+AttributeError: 'BaseQuery' object has no attribute 'ge'
+
+In [46]: usr = User.query.get(2)
+
+In [47]: usr
+Out[47]: User('inoo', 'inoo@example.com', 'default.jpg')
+
+In [48]: bk = Books.query.get(2)
+
+In [49]: bk
+Out[49]: Books('Krondor: The Betrayal', '0380795272')
+
+In [50]: rv = Review(user_id=usr.id, book_id=bk.id, rating=5, content='based on a video game, beleaguered realm of wonders and magic - where war is an enduring legacy.')
+
+In [51]: db.session.add(rv)
+
+In [52]: db.session.commit()
+
+In [53]: usr
+Out[53]: User('inoo', 'inoo@example.com', 'default.jpg')
+
+In [54]: usr.reviews
+Out[54]: [<Review 2>]
+
+In [55]: Review.query.all()
+Out[55]: [<Review 1>, <Review 2>]
+
+In [56]:  rv = Review.query.first()
+
+In [57]: rv
+Out[57]: <Review 1>
+
+In [58]: rv.user
+Out[58]: User('maira', 'maira@example.com', 'default.jpg')
+
+In [59]:
